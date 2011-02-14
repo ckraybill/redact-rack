@@ -16,8 +16,8 @@ module Rack
       response[2].each { |body|
         # Use pretty <span> tags when dealing with html
         body.gsub!(/>([^<]*)</) do |inner|
-          inner.gsub(/#{redact_expr}/) { |m|
-            "<span style='background-color: #000; color: #000'>#{"*" * m.size}</span>"
+          inner.gsub(/#{redact_expr}/i) { |m|
+            "<span style=\"background-color:#000;color:#000;\">#{"*" * m.size}</span>"
           }
         end
 

@@ -12,6 +12,14 @@ describe "Rack::Redact" do
     @redacted = %w(foo bar baz)
   end
 
+  it "should conditionally redact based on the session" do
+    @app = app_with_response("<a>Sample foo response</a>")
+
+    req = Rack::MockRequest.new(Rack::Redact.new(@app, @redacted))
+    res = req.get("/", 'rack.session' => { :redact => false })
+    res.body.should =~ /foo/
+  end
+
   it "should redact a word in html" do
     @app = app_with_response("<a>Sample foo response</a>")
 

@@ -11,6 +11,7 @@ module Rack
     
     def call(env)
       response = @app.call(env)
+      return response unless redact?(env)
       response_body = []
       response[2].each { |body|
         # Use pretty <span> tags when dealing with html
@@ -29,6 +30,12 @@ module Rack
 
       response[2] = response_body
       response
+    end
+
+    # Preserve the original behavior (always redact), unless the session
+    # variable to redact is explicitly set to false
+    def redact?(env)
+      env['rack.session'].nil? || env['rack.session'][:redact]
     end
   end
 end

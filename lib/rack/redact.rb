@@ -8,8 +8,12 @@ module Rack
     def redact_expr
       @redacted.join("|")
     end
-    
+
     def call(env)
+      dup._call(env)
+    end
+
+    def _call(env)
       response = @app.call(env)
       return response unless redact?(env)
       response_body = []
